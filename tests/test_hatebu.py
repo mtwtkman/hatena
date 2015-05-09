@@ -145,6 +145,18 @@ class HatebuRestTest(unittest.TestCase):
 
         self.assertEqual(len(response[0][0][0][0]), 2) # struct
 
+    def test_get_entry_json(self):
+        target_url = 'http://www.hatena.ne.jp/'
+        response = self._makeOne().get_entry_json(target_url)
+
+        self.assertEqual(len(response.keys()), 8)
+
+    def test_get_entry_json_lite(self):
+        target_url = 'http://www.hatena.ne.jp/'
+        response = self._makeOne().get_entry_json(target_url, lite=True)
+
+        self.assertEqual(len(response.keys()), 7)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -155,3 +155,12 @@ class Hatebu(object):
             return ET.fromstring(response.text)
         else:
             return {'status_code': response.status_code, 'reason': response.reason}
+
+    def get_entry_json(self, url, callback=None, lite=False):
+        endpoint = 'http://b.hatena.ne.jp/entry/json/' if lite is False else 'http://b.hatena.ne.jp/entry/jsonlite/'
+        response = requests.get(url=endpoint, params={'url': url, 'callback': callback})
+
+        if response.ok:
+            return json.loads(response.text)
+        else:
+            return {'status_code': response.status_code, 'reason': response.reason}
