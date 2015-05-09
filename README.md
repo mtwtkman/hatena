@@ -2,10 +2,11 @@
 `python setup.py develop`
 
 example needs `bottle`.
+
 `python setup.py example`
 
 #Usage
-##Authrization
+##Authorization
 ```
 import hatena import OAuth
 oauth = OAuth()

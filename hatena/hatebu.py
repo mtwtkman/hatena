@@ -2,6 +2,8 @@
 import os
 import sys
 import json
+from xmlrpc.client import dumps as xmlrpc_dumps
+from xml.etree import ElementTree as ET
 
 import requests
 from requests_oauthlib import OAuth1
@@ -17,6 +19,7 @@ class Hatebu(object):
     def __init__(self, rest_api_version='1'):
         self.base_url = 'http://api.b.hatena.ne.jp/{version}/my/'.format(version=rest_api_version)
         self.rest_url = self.base_url + 'bookmark'
+        self.xmlrpc_url = 'http://b.hatena.ne.jp/xmlrpc'
         self.auth = OAuth1(
             client_key=OAuth().consumer_key,
             client_secret=OAuth().consumer_secret,
@@ -82,7 +85,7 @@ class Hatebu(object):
             response = requests.get(self.base_url.replace('my/', 'entry'), params={'url': url}, auth=self.auth)
 
             if response.ok:
-                return response.text
+                return json.loads(response.text)
             else:
                 return {'status_code': response.status_code, 'reason': response.reason}
         else:
@@ -93,7 +96,7 @@ class Hatebu(object):
         if need in self.scope:
             response = requests.get(self.base_url+'tags', params={'url': url}, auth=self.auth)
             if response.ok:
-                return response.text
+                return json.loads(response.text)
             else:
                 return {'status_code': response.status_code, 'reason': response.reason}
         else:
@@ -105,10 +108,50 @@ class Hatebu(object):
             response = requests.get(self.base_url[:-1], auth=self.auth)
 
             if response.ok:
-                return response.text
+                return json.loads(response.text)
             else:
                 return {'status_code': response.status_code, 'reason': response.reason}
         else:
             'Need to authorize with {}'.format(need)
 
+    def get_count(self, url):
+        response = requests.get('http://api.b.st-hatena.com/entry.counts', params={'url': url})
 
+        if response.ok:
+            return json.loads(response.text)
+        else:
+            return {'status_code': response.status_code, 'reason': response.reason}
+
+    def xmlrpc_get_count(self, url):
+        if isinstance(url, str):
+            url = (url,)
+        data = xmlrpc_dumps(params=tuple(url), methodname='bookmark.getCount')
+        response = requests.post(url=self.xmlrpc_url, data=data)
+
+        if response.ok:
+            return ET.fromstring(response.text)
+        else:
+            return {'status_code': response.status_code, 'reason': response.reason}
+
+    def xmlrpc_get_total_count(self, url):
+        data = xmlrpc_dumps(params=(url,), methodname='bookmark.getTotalCount')
+        response = requests.post(url=self.xmlrpc_url, data=data)
+
+        if response.ok:
+            return ET.fromstring(response.text)
+        else:
+            return {'status_code': response.status_code, 'reason': response.reason}
+
+    def xmlrpc_get_asin_count(self, asin):
+        if isinstance(asin, int):
+            asin = (str(asin),)
+        elif isinstance(asin, (tuple, list)):
+            asin = tuple(map(lambda x: str(x), asin))
+
+        data = xmlrpc_dumps(params=tuple(asin), methodname='bookmark.getAsinCount')
+        response = requests.post(url=self.xmlrpc_url, data=data)
+
+        if response.ok:
+            return ET.fromstring(response.text)
+        else:
+            return {'status_code': response.status_code, 'reason': response.reason}
