@@ -9,7 +9,7 @@ SRC_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardi
 sys.path.append(os.path.abspath(SRC_PATH))
 
 
-class HatebuTest(unittest.TestCase):
+class HatebuRestTest(unittest.TestCase):
     def _getTargetClass(self):
         from hatena import Hatebu
         return Hatebu
@@ -29,8 +29,15 @@ class HatebuTest(unittest.TestCase):
 
         self.assertEqual(response['status_code'], 404)
 
-    def test_rest_post(self):
+    def test_rest_post_and_delete(self):
         target_url = 'http://karapaia.livedoor.biz/archives/52191138.html'
+        response = self._makeOne().post(target_url, comment='yeah')
+
+        self.assertEqual(response['comment'], 'yeah')
+
+        response = self._makeOne().delete(target_url)
+
+        self.assertEqual(response, 'ok')
 
 
 if __name__ == '__main__':

@@ -32,28 +32,31 @@ class OAuthTest(unittest.TestCase):
 
     def test_only_invalid_scope_is_failed(self):
         msg = 'invalid scope.'
-        response = self._makeOne().get_access_token(scope=['nil_scope'])
+        response = self._makeOne().get_request_token(scope=['nil_scope'])
         self.assertEqual(response, msg)
 
     def test_invalid_scope_included_is_failed(self):
         msg = 'invalid scope.'
-        response = self._makeOne().get_access_token(scope=['nil_scope', 'read_public'])
+        response = self._makeOne().get_request_token(scope=['nil_scope', 'read_public'])
         self.assertEqual(response, msg)
 
     def test_valid_duplicated_scope_allowed(self):
-        response = self._makeOne().get_access_token(scope=['read_public', 'read_public', 'write_private'])
-        self.assertTrue(response.ok)
+        response = self._makeOne().get_request_token(scope=['read_public', 'read_public', 'write_private'])
+        self.assertTrue(isinstance(response, tuple))
 
     def test_argument_all_replaced_to_allowed_four_scopes(self):
         allowed_scope = ['read_private', 'read_public', 'write_private', 'write_public']
         obj = self._makeOne()
-        response = obj.get_access_token(scope=['all'])
-        self.assertTrue(response.ok)
+        response = obj.get_request_token(scope=['all'])
+        self.assertTrue(isinstance(response, tuple))
         self.assertEqual(obj.scope, allowed_scope)
 
     def test_get_access_token(self):
-        response = self._makeOne().get_access_token(scope=['read_public', 'write_private'])
-        self.assertTrue(response.ok)
+        obj = self._makeOne()
+        obj.get_request_token(scope=['all'])
+        obj.get_verifier()
+        response = obj.get_access_token()
+        self.assertTrue(isinstance(response, tuple))
 
 
 if __name__ == '__main__':

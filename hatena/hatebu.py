@@ -79,7 +79,8 @@ class Hatebu(object):
     def get_entry(self, url):
         need = 'read_private'
         if need in self.scope:
-            response = requests.get(self.base_url+'entry', params={'url': url}, auth=self.auth)
+            response = requests.get(self.base_url.replace('my/', 'entry'), params={'url': url}, auth=self.auth)
+
             if response.ok:
                 return response.text
             else:
@@ -101,7 +102,7 @@ class Hatebu(object):
     def get_my(self):
         need = 'read_private'
         if need in self.scope:
-            response = requests.get(self.base_url, auth=self.auth)
+            response = requests.get(self.base_url[:-1], auth=self.auth)
 
             if response.ok:
                 return response.text
@@ -109,3 +110,5 @@ class Hatebu(object):
                 return {'status_code': response.status_code, 'reason': response.reason}
         else:
             'Need to authorize with {}'.format(need)
+
+
