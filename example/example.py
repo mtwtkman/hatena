@@ -17,8 +17,17 @@ hatebu = Hatebu()
 @route('/')
 def index():
     return '''
-        <a href='/oauth'>oauth</a></br>
-        <a href="hatebu/entry">hatebu entry</a>'''
+        <a href="/oauth">oauth</a></br>
+        <form action="/hatebu/entry" method="get">
+            url: <input name="url" type="text" />
+            <input value="get_entry" type="submit" />
+        </form>
+        <p>
+        <form action="/hatebu/count" method="get">
+            url: <input name="url" type="text" />
+            <input value="get_count" type="submit" />
+        </form>
+    '''
 
 
 @route('/oauth')
@@ -36,10 +45,19 @@ def oauth_callback():
     else:
         return 'oops...'
 
-@route('/hatebu/entry/<url>')
-def hatebu_entry(url):
-    return str(hatebu.get_entry(url))
+
+@route('/hatebu/entry')
+def hatebu_entry():
+    return str(hatebu.get_entry(request.query['url']))
+
+
+@route('/hatebu/count')
+def hatebu_count():
+    urls = request.query['url'].split(',')
+    response = hatebu.get_count(request.query['url'])
+
+    return response
 
 
 if __name__ == '__main__':
-    run(host='localhost', port='5000', debug=True)
+    run(host='localhost', port='5000', debug=True, reloader=True)

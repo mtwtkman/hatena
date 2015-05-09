@@ -1,17 +1,24 @@
+#Description
+[Hatena API](http://developer.hatena.ne.jp/) implemented by python3.
+
+Status of implementation(too many incompleted implementation...):
+
+- [x] Authorization
+- [x] Hatena bookmark
+- [ ] Hatena diary
+- [ ] Hatena blog
+- [ ] Hatena star
+- [ ] Hatena message
+- [ ] Hatana photolife
+- [ ] Hatana keyword
+- [ ] Hatena hike
+- [ ] Hatena graph
+- [ ] Hatena search
+- [ ] Shorten URL
+
+Guarantee to implement all of above is NOT. :-)
+
 #Install
 `python setup.py develop`
 
-example needs `bottle`.
-
-`python setup.py example`
-
-#Usage
-##Authorization
-```
-import hatena import OAuth
-oauth = OAuth()
-oauth.get_request_token()
-oauth.get_verifier()
-oauth.get_access_token()
-```
-Then, `config.json` is created under hatena directory.
+example needs `bottle`.Then, `python setup.py example`
