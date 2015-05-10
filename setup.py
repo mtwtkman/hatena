@@ -32,7 +32,7 @@ params = {
     'url': 'http://github.com/mtwtkman/hatena/',
     'packages': find_packages('hatena'),
     'license': 'WTFPL',
-    'download_url': 'https://github.com/mtwtk_man/hatena/tarball/master',
+    'download_url': 'https://github.com/mtwtk_man/hatena/archive/master.tar.gz',
 }
 
 setup(**params)

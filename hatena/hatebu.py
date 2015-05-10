@@ -17,16 +17,17 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.
 class Hatebu(object):
     '''Hatena bookmark API'''
     def __init__(self, rest_api_version='1'):
+        oauth = OAuth()
         self.base_url = 'http://api.b.hatena.ne.jp/{version}/my/'.format(version=rest_api_version)
         self.rest_url = self.base_url + 'bookmark'
         self.xmlrpc_url = 'http://b.hatena.ne.jp/xmlrpc'
         self.auth = OAuth1(
-            client_key=OAuth().consumer_key,
-            client_secret=OAuth().consumer_secret,
-            resource_owner_key=OAuth().access_token,
-            resource_owner_secret=OAuth().access_token_secret
+            client_key=oauth.consumer_key,
+            client_secret=oauth.consumer_secret,
+            resource_owner_key=oauth.access_token,
+            resource_owner_secret=oauth.access_token_secret
         )
-        self.scope = OAuth().scope
+        self.scope = oauth.scope
 
     '''
     REST API
