@@ -28,6 +28,7 @@ class Hatebu(object):
             resource_owner_secret=oauth.access_token_secret
         )
         self.scope = oauth.scope
+        self.user_id = oauth.user_id
 
     '''
     REST API
@@ -160,6 +161,24 @@ class Hatebu(object):
     def get_entry_json(self, url, callback=None, lite=False):
         endpoint = 'http://b.hatena.ne.jp/entry/json/' if lite is False else 'http://b.hatena.ne.jp/entry/jsonlite/'
         response = requests.get(url=endpoint, params={'url': url, 'callback': callback})
+
+        if response.ok:
+            return json.loads(response.text)
+        else:
+            return {'status_code': response.status_code, 'reason': response.reason}
+
+    def search(self, user_id=None, q=None, of=None, limit=None, sort=None,):
+        if user_id is None:
+            return 'please specify user_id'
+
+        endpoint = 'http://b.hatena.ne.jp/{}/search/json'.format(user_id)
+        params = {
+            'q': q,
+            'of': of,
+            'limit': limit,
+            'sort': sort
+        }
+        response = requests.get(url=endpoint, params=params, auth=self.auth)
 
         if response.ok:
             return json.loads(response.text)

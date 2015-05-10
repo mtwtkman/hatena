@@ -34,6 +34,10 @@ class OAuth(object):
     def scope(self):
         return self._scope
 
+    @property
+    def user_id(self):
+        return self._user_id
+
     def __init__(self, config_file_name='config.json'):
         self.config_file = os.path.join(os.path.dirname(__file__), config_file_name)
         if os.path.exists(self.config_file):
@@ -43,6 +47,7 @@ class OAuth(object):
             self._consumer_secret = self.json_data.get('CONSUMER_SECRET', None)
             self._access_token = self.json_data.get('ACCESS_TOKEN', None)
             self._access_token_secret = self.json_data.get('ACCESS_TOKEN_SECRET', None)
+            self._user_id = self.json_data.get('USER_ID', None)
             self._scope = self.json_data.get('SCOPE', None)
         else:
             self._consumer_key, self._consumer_secret = self.config()
@@ -84,7 +89,6 @@ class OAuth(object):
             'touch': 'https://www.hatena.ne.jp/touch/oauth/authorize',
             'mobile': 'http://www.hatena.ne.jp/mobile/oauth/authorize'
         }
-
         if self.callback_uri != 'oob':
             return requests.Request('GET', urls[device], params={'oauth_token': self.request_token}).prepare().url
 
@@ -114,6 +118,7 @@ class OAuth(object):
             content = parse_qs(access_response.text)
             self._access_token = self.json_data['ACCESS_TOKEN'] = content['oauth_token'][0]
             self._access_token_secret = self.json_data['ACCESS_TOKEN_SECRET'] = content['oauth_token_secret'][0]
+            self._user_id = self.json_data['USER_ID'] = content['url_name'][0]
             self.json_data['SCOPE'] = self._scope
             with open(self.config_file, 'w') as f:
                 f.write(json.dumps(self.json_data, indent=2, sort_keys=True))

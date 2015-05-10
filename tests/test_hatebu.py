@@ -157,6 +157,12 @@ class HatebuRestTest(unittest.TestCase):
 
         self.assertEqual(len(response.keys()), 7)
 
+    def test_search(self):
+        target_user_id = 'mtwtk_man'
+        response = self._makeOne().search(target_user_id)
+
+        self.assertTrue('bookmarks' in response.keys())
+
 
 if __name__ == '__main__':
     unittest.main()
