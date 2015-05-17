@@ -7,23 +7,23 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.
 
 
 from bottle import redirect, run, route, request
-from hatena import OAuth, Hatebu
+from hatena import OAuth, Bookmark
 
 
 oauth = OAuth()
-hatebu = Hatebu()
+bookmark = Bookmark()
 
 
 @route('/')
 def index():
     return '''
         <a href="/oauth">oauth</a></br>
-        <form action="/hatebu/entry" method="get">
+        <form action="/bookmark/entry" method="get">
             url: <input name="url" type="text" />
             <input value="get_entry" type="submit" />
         </form>
         <p>
-        <form action="/hatebu/count" method="get">
+        <form action="/bookmark/count" method="get">
             url: <input name="url" type="text" />
             <input value="get_count" type="submit" />
         </form>
@@ -46,15 +46,15 @@ def oauth_callback():
         return 'oops...'
 
 
-@route('/hatebu/entry')
-def hatebu_entry():
-    return str(hatebu.get_entry(request.query['url']))
+@route('/bookmark/entry')
+def bookmark_entry():
+    return str(bookmark.get_entry(request.query['url']))
 
 
-@route('/hatebu/count')
-def hatebu_count():
+@route('/bookmark/count')
+def bookmark_count():
     urls = request.query['url'].split(',')
-    response = hatebu.get_count(request.query['url'])
+    response = bookmark.get_count(request.query['url'])
 
     return response
 

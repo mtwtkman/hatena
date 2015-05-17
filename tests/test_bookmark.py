@@ -8,10 +8,10 @@ SRC_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardi
 sys.path.append(os.path.abspath(SRC_PATH))
 
 
-class HatebuRestTest(unittest.TestCase):
+class BookmarkRestTest(unittest.TestCase):
     def _getTargetClass(self):
-        from hatena import Hatebu
-        return Hatebu
+        from hatena import Bookmark
+        return Bookmark
 
     def _makeOne(self, *args, **kwargs):
         return self._getTargetClass()(*args, **kwargs)

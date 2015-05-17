@@ -14,7 +14,7 @@ from .oauth import OAuth
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
 
-class Hatebu(object):
+class Bookmark(object):
     '''Hatena bookmark API'''
     def __init__(self, rest_api_version='1'):
         oauth = OAuth()

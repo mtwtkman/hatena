@@ -1,3 +1,4 @@
 # -*- coding:utf-8 -*-
 from hatena.oauth import OAuth
-from hatena.hatebu import Hatebu
+from hatena.bookmark import Bookmark
+from hatena.diary import Diary
